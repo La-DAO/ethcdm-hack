@@ -97,7 +97,7 @@ const CreateTandaModal: React.FC<CreateTandaModalProps> = ({
   return (
     isOpen && (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-        <div className="bg-white p-6 rounded-lg shadow-lg w-1/2">
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-1/2">
           {renderStepContent()}
           <div className="flex justify-between mt-4">
             <Button onClick={prevStep} disabled={step === 1}>
@@ -112,7 +112,9 @@ const CreateTandaModal: React.FC<CreateTandaModalProps> = ({
               <div
                 key={n}
                 className={`h-2 w-2 rounded-full mx-1 ${
-                  step === n + 1 ? 'bg-blue-500' : 'bg-gray-300'
+                  step === n + 1
+                    ? 'bg-blue-500'
+                    : 'bg-gray-300 dark:bg-gray-600'
                 }`}
               ></div>
             ))}
