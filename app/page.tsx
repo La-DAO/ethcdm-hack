@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { usePrivy } from "@privy-io/react-auth";
-import { useRouter } from "next/navigation";
+import { useEffect } from 'react';
+import { usePrivy } from '@privy-io/react-auth';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
   const { ready, authenticated, login } = usePrivy();
@@ -10,9 +10,19 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (ready && authenticated) {
-      router.push("/dashboard");
+      router.push('/dashboard');
     }
   }, [ready, authenticated, router]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      import('@walletconnect/ethereum-provider').then(
+        ({ default: WalletConnectProvider }) => {
+          const provider = new WalletConnectProvider();
+        }
+      );
+    }
+  }, []);
 
   if (!ready) return null;
 
