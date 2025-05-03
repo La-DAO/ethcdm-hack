@@ -46,7 +46,7 @@ contract TandaAppTest is Test {
     address public bob = address(2);
     address public mxnb = address(100); // mock token
 
-    uint256 constant AMOUNT = 100 * 1e18;
+    uint256 constant AMOUNT = 100 * 1e6;
 
     MockERC20 public token;
 
