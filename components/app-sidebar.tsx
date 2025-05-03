@@ -35,34 +35,34 @@ import {
 
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
+    name: "garosan",
+    email: "garosan@gmail.com",
     avatar: "/avatars/shadcn.jpg",
   },
   navMain: [
     {
-      title: "Dashboard",
-      url: "#",
+      title: "Inicio",
+      url: "/dashboard",
       icon: IconDashboard,
     },
     {
-      title: "Lifecycle",
-      url: "#",
+      title: "Acciones",
+      url: "/acciones",
       icon: IconListDetails,
     },
     {
-      title: "Analytics",
-      url: "#",
+      title: "Métricas",
+      url: "/metricas",
       icon: IconChartBar,
     },
     {
-      title: "Projects",
-      url: "#",
+      title: "Mis Tandas",
+      url: "/mis-tandas",
       icon: IconFolder,
     },
     {
-      title: "Team",
-      url: "#",
+      title: "Mis grupos",
+      url: "/mis-grupos",
       icon: IconUsers,
     },
   ],
@@ -113,7 +113,7 @@ const data = {
         },
       ],
     },
-  ],
+  ],/* 
   navSecondary: [
     {
       title: "Settings",
@@ -130,24 +130,7 @@ const data = {
       url: "#",
       icon: IconSearch,
     },
-  ],
-  documents: [
-    {
-      name: "Data Library",
-      url: "#",
-      icon: IconDatabase,
-    },
-    {
-      name: "Reports",
-      url: "#",
-      icon: IconReport,
-    },
-    {
-      name: "Word Assistant",
-      url: "#",
-      icon: IconFileWord,
-    },
-  ],
+  ], */
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -162,7 +145,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             >
               <a href="#">
                 <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
+                <span className="text-base font-semibold">Tandas dApp</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -170,8 +153,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavDocuments items={data.documents} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
