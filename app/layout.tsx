@@ -1,15 +1,24 @@
+"use client";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { PrivyAuthProvider } from "@/components/providers/privy-provider";
+import dynamic from "next/dynamic";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: "TandasApp",
-  description: "",
-};
+// export const metadata: Metadata = {
+//   title: "TandasApp",
+//   description: "",
+// };
+
+const PrivyAuthProvider = dynamic(
+  () =>
+    import("@/components/providers/privy-provider").then(
+      (mod) => mod.PrivyAuthProvider
+    ),
+  { ssr: false }
+);
 
 export default function RootLayout({
   children,
