@@ -9,11 +9,14 @@ import { PendientesRecibir } from '@/components/dashboard/pendientes-recibir';
 import { TandasActivas } from '@/components/dashboard/tandas-activas';
 import { Transacciones } from '@/components/dashboard/transacciones';
 import CreateTandaModal from '@/components/create-tanda-modal';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAccount } from 'wagmi';
+
 import data from './data.json';
 
 export default function Page() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { address, isConnected } = useAccount();
 
   const handleButtonClick = () => {
     setIsModalOpen(true);
@@ -22,6 +25,12 @@ export default function Page() {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // Browser-specific code here
+    }
+  }, []);
 
   return (
     <SidebarProvider
@@ -39,6 +48,9 @@ export default function Page() {
           <h1 className="text-3xl font-bold mb-2 mt-8 text-left">
             ¡Qué gusto verte de nuevo!
           </h1>
+          {isConnected && (
+            <p className="text-gray-400 text-left">Conectado como: {address}</p>
+          )}
           <p className="text-gray-400 text-left">
             Aquí tienes un resumen de tus actividades decentralizadas
           </p>
@@ -57,7 +69,7 @@ export default function Page() {
             <p className="text-xl font-medium">$600.00 $MXNb</p>
           </div>
           <Button
-            className="mt-4 md:mt-0 bg-emerald-700 hover:bg-emerald-800 text-white rounded-full px-6"
+            className="mt-4 md:mt-0 bg-primary hover:bg-primary-dark text-white rounded-full px-18 py-8 text-2xl"
             onClick={handleButtonClick}
           >
             Crea tu Tanda
