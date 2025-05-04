@@ -43,7 +43,7 @@ export function TandasActivas() {
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Button className="bg-emerald-700 hover:bg-emerald-800 text-white rounded-md px-4">
+                  <Button className="mt-4 md:mt-0 bg-primary hover:bg-primary-dark text-white rounded-full px-8 py-4 text-md">
                     Aportar
                   </Button>
                   <Button variant="ghost" size="icon" className="text-gray-400">

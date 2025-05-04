@@ -28,12 +28,30 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <button
-        onClick={login}
-        className="bg-green-500 text-white px-4 py-2 rounded"
-      >
-        Entrar a TandasApp
-      </button>
+      <div className="flex flex-row w-full max-w-4xl">
+        {/* Columna izquierda con la imagen */}
+        <div className="w-1/2 flex items-center justify-center h-full">
+          <img
+            src="/photo_2025-05-04_02-10-17.jpg"
+            alt="Feriesilla"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        {/* Columna derecha con el botón e información adicional */}
+        <div className="w-1/2 flex flex-col items-center justify-center">
+          <button
+            onClick={login}
+            className="bg-green-500 text-white px-4 py-2 rounded mb-4"
+          >
+            Entrar a TandasApp
+          </button>
+          <p className="text-center text-gray-700">
+            Bienvenido a TandasApp, la plataforma que te ayuda a gestionar tus
+            finanzas de manera eficiente. Únete a nuestra comunidad y comienza a
+            ahorrar hoy mismo.
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

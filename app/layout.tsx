@@ -1,11 +1,14 @@
-"use client";
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
-import dynamic from "next/dynamic";
+'use client';
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+import { ThemeProvider } from '@/components/theme-provider';
+import dynamic from 'next/dynamic';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { WagmiProvider } from '@privy-io/wagmi';
+import { config as wagmiConfig } from '../wagmiConfig';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 
 // export const metadata: Metadata = {
 //   title: "TandasApp",
@@ -14,11 +17,14 @@ const inter = Inter({ subsets: ["latin"] });
 
 const PrivyAuthProvider = dynamic(
   () =>
-    import("@/components/providers/privy-provider").then(
+    import('@/components/providers/privy-provider').then(
       (mod) => mod.PrivyAuthProvider
     ),
   { ssr: false }
 );
+
+// Create a new instance of QueryClient
+const queryClient = new QueryClient();
 
 export default function RootLayout({
   children,
@@ -34,7 +40,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <PrivyAuthProvider>{children}</PrivyAuthProvider>
+          <PrivyAuthProvider>
+            <QueryClientProvider client={queryClient}>
+              <WagmiProvider config={wagmiConfig}>{children}</WagmiProvider>
+            </QueryClientProvider>
+          </PrivyAuthProvider>
         </ThemeProvider>
       </body>
     </html>
