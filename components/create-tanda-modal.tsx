@@ -1,9 +1,9 @@
-// Create a new file: ethcdm-hack/components/CreateTandaModal.tsx
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { useCreateTanda } from '@/hooks/use-create-tanda';
+import React, { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { useCreateTanda } from "@/hooks/use-create-tanda";
+import { toast } from "sonner";
 
 // Define the props type
 interface CreateTandaModalProps {
@@ -17,13 +17,34 @@ const CreateTandaModal: React.FC<CreateTandaModalProps> = ({
 }) => {
   if (!isOpen) return null; // Don't render the modal if it's not open
   const [step, setStep] = useState(1);
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [participants, setParticipants] = useState(4);
   const [contribution, setContribution] = useState(0);
   const [turn, setTurn] = useState(1);
   const { createTanda, isPending, isSuccess, isError, error, status } =
     useCreateTanda();
+
+  // Al éxito, cierro modal y muestro toast de éxito
+  useEffect(() => {
+    if (isSuccess) {
+      onClose();
+      toast.success("¡Tanda creada!", {
+        description:
+          "Felicidades, tu tanda se ha creado. Ahora puedes empezar a ahorrar y cumplir esas metas.",
+      });
+    }
+  }, [isSuccess, onClose]);
+
+  // En caso de error, muestro toast de error
+  useEffect(() => {
+    if (isError) {
+      toast.error("Error al crear tanda", {
+        description:
+          error?.message || "Ocurrió un problema al procesar la transacción.",
+      });
+    }
+  }, [isError, error]);
 
   const nextStep = () => setStep((prev) => Math.min(prev + 1, 5));
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
@@ -31,17 +52,17 @@ const CreateTandaModal: React.FC<CreateTandaModalProps> = ({
   // Close modal on 'Esc' key press
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
+      if (event.key === "Escape") {
         onClose();
       }
     };
 
     if (isOpen) {
-      window.addEventListener('keydown', handleKeyDown);
+      window.addEventListener("keydown", handleKeyDown);
     }
 
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isOpen, onClose]);
 
@@ -151,49 +172,43 @@ const CreateTandaModal: React.FC<CreateTandaModalProps> = ({
     }
   };
 
-  return (
-    isOpen && (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-1/4 h-96 relative flex flex-col justify-between">
-          <button
-            onClick={onClose}
-            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-3xl"
+  return isOpen ? (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-1/4 h-96 relative flex flex-col justify-between">
+        <button onClick={onClose} className="absolute top-2 right-2 text-3xl">
+          ×
+        </button>
+
+        <div className="flex-grow overflow-auto">{renderStepContent()}</div>
+
+        <div className="flex justify-between mt-4">
+          <Button
+            onClick={() => setStep((s) => Math.max(s - 1, 1))}
+            disabled={step === 1}
           >
-            &times;
-          </button>
-          <div className="flex-grow">{renderStepContent()}</div>
-          <div className="flex justify-between mt-4">
-            <Button
-              className="border mx-1 text-white"
-              onClick={prevStep}
-              disabled={step === 1}
-            >
-              &#8592;
-            </Button>
-            <Button
-              className="border mx-1 text-white"
-              onClick={nextStep}
-              disabled={step === 5}
-            >
-              &#8594;
-            </Button>
-          </div>
-          <div className="flex justify-center mt-4">
-            {[...Array(5).keys()].map((n) => (
-              <div
-                key={n}
-                className={`h-2 w-2 rounded-full mx-1 ${
-                  step === n + 1
-                    ? 'bg-blue-500'
-                    : 'bg-gray-300 dark:bg-gray-600'
-                }`}
-              ></div>
-            ))}
-          </div>
+            ←
+          </Button>
+          <Button
+            onClick={() => setStep((s) => Math.min(s + 1, 5))}
+            disabled={step === 5}
+          >
+            →
+          </Button>
+        </div>
+
+        <div className="flex justify-center mt-4">
+          {[...Array(5)].map((_, i) => (
+            <div
+              key={i}
+              className={`h-2 w-2 rounded-full mx-1 ${
+                step === i + 1 ? "bg-blue-500" : "bg-gray-300 dark:bg-gray-600"
+              }`}
+            />
+          ))}
         </div>
       </div>
-    )
-  );
+    </div>
+  ) : null;
 };
 
 export default CreateTandaModal;
