@@ -38,13 +38,14 @@ En México, millones de personas participan en **tandas** — rondas de ahorro e
 
 ## 🔗 Contratos Inteligentes
 
-- **TandaFactory** (Creador de tandas)  
+- **TandaFactory** (Creador de tandas en Arbitrum 🧡,💙)  
   [🔍 Verificado en Arbiscan](https://sepolia.arbiscan.io/address/0x7F080196962aD0c85f068b853AA3468Fd5D17Db7)
 
 - **MXNB Token (Bitso)**  
   [🔍 Contrato oficial en Arbiscan](https://sepolia.arbiscan.io/address/0x82B9e52b26A2954E113F94Ff26647754d5a4247D)
 
----
+- **TandaFactory** (Creador de tandas en Scroll 📜)  
+  [🔍 Verificado en Scrollscan](https://sepolia.scrollscan.com/address/0xdf0923eaae5612ab144b1296d45d2740b336ba6b)
 
 ## 📄 Documentación adicional
 
