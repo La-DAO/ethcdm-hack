@@ -11,3 +11,4 @@ rpc_endpoints = { arbitrum-sepolia = "${ARBITRUM_SEPOLIA_RPC_URL}" }
 
 [etherscan]
 arbitrum-sepolia = { key = "${ARBISCAN_API_KEY}" }
+scroll-sepolia = { key = "${SCROLLSCAN_API_KEY}" }
