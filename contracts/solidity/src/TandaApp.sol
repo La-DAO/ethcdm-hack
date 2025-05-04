@@ -1,10 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.29;
 
-/// @title TandaApp - Tandas Web3 para tod@s
-/// @author Garosan
-/// @notice MVP for a ROSCA defi app based on smart contracts
-
 interface IERC20 {
     function transferFrom(
         address sender,
@@ -26,16 +22,15 @@ error TandaApp__InvalidGroupSize();
 error TandaApp__NoParticipants();
 error TandaApp__AllTurnsCompleted();
 error TandaApp__NotOwner();
+error TandaApp__GroupFull();
 
 contract TandaApp {
-    // ---------------------
-    // State Variables
-    // ---------------------
     address public immutable i_owner;
     address public immutable i_stableToken;
     uint256 public immutable i_contributionAmount;
 
     uint256 public s_currentTurn;
+    uint256 public constant MAX_PARTICIPANTS = 4;
 
     struct Participant {
         address wallet;
@@ -45,42 +40,45 @@ contract TandaApp {
     Participant[] public s_participants;
     mapping(address => bool) public s_joined;
 
-    // ---------------------
-    // Events
-    // ---------------------
     event Joined(address indexed user, uint256 index);
     event Payout(address indexed to, uint256 amount, uint256 turn);
     event TurnAdvanced(uint256 newTurn);
     event FundsReceived(address indexed from, uint256 amount);
     event FundsSent(address indexed to, uint256 amount);
+    event RefundIssued(address indexed to, uint256 amount);
+    event TandaReady();
 
-    // ---------------------
-    // Modifiers
-    // ---------------------
     modifier onlyOwner() {
         if (msg.sender != i_owner) revert TandaApp__NotOwner();
         _;
     }
 
-    constructor(address _stableToken, uint256 _contributionAmount) {
+    constructor(
+        address _owner,
+        address _stableToken,
+        uint256 _contributionAmount
+    ) {
+        if (_owner == address(0)) revert TandaApp__ZeroAddress();
         if (_stableToken == address(0)) revert TandaApp__ZeroAddress();
         if (_contributionAmount == 0) revert TandaApp__InvalidGroupSize();
 
-        i_owner = msg.sender;
+        i_owner = _owner;
         i_stableToken = _stableToken;
         i_contributionAmount = _contributionAmount;
         s_currentTurn = 0;
     }
 
-    /// @notice Únete a la tanda enviando MXNB
     function joinTanda() external {
         if (s_joined[msg.sender]) revert TandaApp__AlreadyJoined();
+        if (s_participants.length >= MAX_PARTICIPANTS)
+            revert TandaApp__GroupFull();
 
         IERC20(i_stableToken).transferFrom(
             msg.sender,
             address(this),
             i_contributionAmount
         );
+
         s_participants.push(
             Participant({wallet: msg.sender, hasWithdrawn: false})
         );
@@ -88,11 +86,15 @@ contract TandaApp {
 
         emit Joined(msg.sender, s_participants.length - 1);
         emit FundsReceived(msg.sender, i_contributionAmount);
+
+        if (s_participants.length == MAX_PARTICIPANTS) {
+            emit TandaReady();
+        }
     }
 
-    /// @notice Retira los fondos si es tu turno
     function withdrawMyTurn() external {
-        if (s_participants.length == 0) revert TandaApp__NoParticipants();
+        if (s_participants.length != MAX_PARTICIPANTS)
+            revert TandaApp__InvalidGroupSize();
         if (s_currentTurn >= s_participants.length)
             revert TandaApp__AllTurnsCompleted();
 
@@ -108,8 +110,9 @@ contract TandaApp {
         emit FundsSent(msg.sender, payout);
     }
 
-    /// @notice Avanza al siguiente turno manualmente (MVP simplificado)
     function advanceTurn() external onlyOwner {
+        if (s_participants.length != MAX_PARTICIPANTS)
+            revert TandaApp__InvalidGroupSize();
         if (s_currentTurn >= s_participants.length - 1)
             revert TandaApp__AllTurnsCompleted();
         s_currentTurn += 1;
@@ -117,9 +120,14 @@ contract TandaApp {
         emit TurnAdvanced(s_currentTurn);
     }
 
-    // ---------------------
-    // Getters
-    // ---------------------
+    function refundAllDeposits() external onlyOwner {
+        for (uint256 i = 0; i < s_participants.length; i++) {
+            Participant memory p = s_participants[i];
+            IERC20(i_stableToken).transfer(p.wallet, i_contributionAmount);
+            emit RefundIssued(p.wallet, i_contributionAmount);
+        }
+    }
+
     function getParticipants() external view returns (Participant[] memory) {
         return s_participants;
     }
