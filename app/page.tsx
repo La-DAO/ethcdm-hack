@@ -27,29 +27,32 @@ export default function LoginPage() {
   if (!ready) return null;
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="flex flex-row w-full max-w-4xl">
-        {/* Columna izquierda con la imagen */}
-        <div className="w-1/2 flex items-center justify-center h-full">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-black to-[#7f3e0c]">
+      <div className="flex flex-row w-full max-w-6xl shadow-lg rounded-lg overflow-hidden">
+        {/* Left Column with Image */}
+        <div className="w-1/2">
           <img
-            src="/photo_2025-05-04_02-10-17.jpg"
-            alt="Feriesilla"
+            src="/Tequio cover.png"
+            alt="Tequio"
             className="w-full h-full object-cover"
           />
         </div>
-        {/* Columna derecha con el botón e información adicional */}
-        <div className="w-1/2 flex flex-col items-center justify-center">
+        {/* Right Column with Text and Button */}
+        <div className="w-1/2 flex flex-col items-center justify-center p-8 bg-white">
+          <h1 className="text-4xl font-bold text-gray-800 mb-4">
+            Bienvenido a Tequio
+          </h1>
+          <p className="text-lg text-gray-600 mb-6">
+            Tequio es una plataforma de tandas onchain. Esta dapp esta
+            actualmente en desarrollo. Para conectar tu wallet, introduce tu
+            email o conecta tu wallet directamente.
+          </p>
           <button
             onClick={login}
-            className="bg-green-500 text-white px-4 py-2 rounded mb-4"
+            className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-full text-lg"
           >
-            Entrar a TandasApp
+            Únete
           </button>
-          <p className="text-center text-gray-700">
-            Bienvenido a TandasApp, la plataforma que te ayuda a gestionar tus
-            finanzas de manera eficiente. Únete a nuestra comunidad y comienza a
-            ahorrar hoy mismo.
-          </p>
         </div>
       </div>
     </div>

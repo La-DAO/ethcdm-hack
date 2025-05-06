@@ -1,8 +1,11 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ChevronDown } from 'lucide-react';
+import { useCreateTanda } from '@/hooks/use-create-tanda';
 
 export function TandasActivas() {
+  const { createTanda, isPending, isSuccess, isError, error, status } =
+    useCreateTanda();
   const tandas = [
     {
       id: 1,
@@ -43,7 +46,10 @@ export function TandasActivas() {
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Button className="mt-4 md:mt-0 bg-primary hover:bg-primary-dark text-white rounded-full px-8 py-4 text-md">
+                  <Button
+                    onClick={() => createTanda()}
+                    className="mt-4 md:mt-0 bg-primary hover:bg-primary-dark text-white rounded-full px-8 py-4 text-md"
+                  >
                     Aportar
                   </Button>
                   <Button variant="ghost" size="icon" className="text-gray-400">

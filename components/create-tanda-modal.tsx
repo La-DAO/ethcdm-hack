@@ -134,16 +134,14 @@ const CreateTandaModal: React.FC<CreateTandaModalProps> = ({
             <p>
               <strong>Turno:</strong> {turn}
             </p>
-            <button
-              onClick={(event) => {
-                event.preventDefault();
-                createTanda();
-              }}
-              className="mt-4 bg-blue-500 text-white p-2 rounded"
+            <Button
+              type="button"
+              onClick={() => createTanda()}
               disabled={isPending}
+              className="mt-4"
             >
               Lanzar Tanda
-            </button>
+            </Button>
           </div>
         );
       default:
