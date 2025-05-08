@@ -53,7 +53,7 @@ contract TandaAppTest is Test {
 
     function setUp() public {
         token = new MockERC20();
-        tanda = new TandaApp(address(token), AMOUNT);
+        tanda = new TandaApp(address(this), address(token), AMOUNT, 4);
 
         // Mint and approve for Alice and Bob
         token.mint(alice, AMOUNT);
@@ -78,7 +78,7 @@ contract TandaAppTest is Test {
         tanda.joinTanda();
 
         vm.prank(alice);
-        vm.expectRevert(TandaApp__AlreadyJoined.selector);
+        vm.expectRevert(TandaApp.TandaApp__AlreadyJoined.selector);
         tanda.joinTanda();
     }
 
@@ -101,7 +101,7 @@ contract TandaAppTest is Test {
 
         // Bob (turn 1) aún no puede
         vm.prank(bob);
-        vm.expectRevert(TandaApp__NotYourTurn.selector);
+        vm.expectRevert(TandaApp.TandaApp__NotYourTurn.selector);
         tanda.withdrawMyTurn();
     }
 
@@ -121,7 +121,7 @@ contract TandaAppTest is Test {
 
         // Bob (not owner) no puede avanzar
         vm.prank(bob);
-        vm.expectRevert(TandaApp__NotOwner.selector);
+        vm.expectRevert(TandaApp.TandaApp__NotOwner.selector);
         tanda.advanceTurn();
 
         // Owner (this contract) sí puede
@@ -159,7 +159,7 @@ contract TandaAppTest is Test {
 
         // Usuario 5 no debería poder entrar
         vm.prank(user5);
-        vm.expectRevert(TandaApp__GroupFull.selector);
+        vm.expectRevert(TandaApp.TandaApp__GroupFull.selector);
         tanda.joinTanda();
     }
 
@@ -169,14 +169,14 @@ contract TandaAppTest is Test {
 
         // solo 1 persona, no debería poder retirar
         vm.prank(alice);
-        vm.expectRevert(TandaApp__InvalidGroupSize.selector);
+        vm.expectRevert(TandaApp.TandaApp__InvalidGroupSize.selector);
         tanda.withdrawMyTurn();
     }
 
     function testCannotAdvanceTurnIfNot4Participants() public {
         vm.prank(alice);
         tanda.joinTanda();
-        vm.expectRevert(TandaApp__InvalidGroupSize.selector);
+        vm.expectRevert(TandaApp.TandaApp__InvalidGroupSize.selector);
         tanda.advanceTurn();
     }
 
@@ -209,7 +209,7 @@ contract TandaAppTest is Test {
         tanda.joinTanda();
 
         vm.prank(alice);
-        vm.expectRevert(TandaApp__NotOwner.selector);
+        vm.expectRevert(TandaApp.TandaApp__NotOwner.selector);
         tanda.refundAllDeposits();
     }
 }
